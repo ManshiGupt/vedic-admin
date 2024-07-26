@@ -1,0 +1,32 @@
+/* In your CSS file */
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.ant-menu-inline .ant-menu-item-selected {
+    background: linear-gradient(135deg, #FF9800, #FBCF24) !important;
+    /* Optional: You can also add other styles */
+    color: white;
+    /* Text color */
+}
+
+.ant-menu-horizontal .ant-menu-item-selected {
+    background-color: transparent !important;
+}
+
+.custom-table .ant-table-thead>tr>th {
+    background-color: #e2e2e2 !important;
+    color: #000 !important;
+}
+
+.ant-spin .ant-spin-dot-item {
+
+    background-color: #FF9800 !important;
+    /* animation-duration: 2.5s !important; */
+    opacity: 0.8 !important;
+
+}
+
+.ant-spin{
+    color: #FF9800 !important;
+}
