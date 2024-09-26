@@ -4,15 +4,18 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import MyButton from '../ui/button.js';
 // import MyAlertBanner from '../ui/alert';
-import { createFaqHelp, updateFaqHelp } from '../api/faq-help-api.js';
+// import { createFaqHelp, updateFaqHelp } from '../api/faq-help-api.js';
+import { createMantraCategory, updateMantraCategory } from '../api/mantra-api.js';
 
-function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
+function MantraCategoryDrawer({ openDrawer, closeDrawer, refreshTable, drawerData, action }) {
 
 
     // const [showBanner, setShowBanner] = useState(false);
     const [title, setTitle] = useState('');
-    const [descriptions, setDescription] = useState('');
+    // const [descriptions, setDescription] = useState('');
+    const [index, setIndex] = useState(1)
     const [loading, setLoading] = useState(false);
+
 
     const [isUpdating, setIsUpdating] = useState(false);
 
@@ -22,8 +25,18 @@ function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
         if (drawerData) {
 
             setTitle(drawerData.title || '')
-            setDescription(drawerData.descriptions || '')
-            setIsUpdating(true)
+            // setDescription(drawerData.descriptions || '')
+            setIndex(drawerData.index || 0)
+
+            if (action === 'View') {
+
+
+            } else {
+
+                setIsUpdating(true)
+
+            }
+
 
         } else {
 
@@ -35,26 +48,28 @@ function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
     const formData = {
 
         title,
-        descriptions,
+        // descriptions,
+        index
     }
 
     const updateData = async () => {
 
         //make the update api call
-        await updateFaqHelp(drawerData._id, formData)
+        await updateMantraCategory(drawerData._id, formData)
 
         setTimeout(() => {
 
             // Display success alert and close the drawer if title and description are not empty
             setLoading(false)
-            alert('Form Updated Successfully...!');
+            alert('Data Updated Successfully...!');
 
             //after successful refresh the table
             refreshTable()
 
             //reset form filed
             setTitle('')
-            setDescription('')
+            // setDescription('')
+            setIndex(0)
 
             //close drawer
             closeDrawer()
@@ -68,7 +83,8 @@ function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
         closeDrawer()
         setIsUpdating(false)
         setTitle('')
-        setDescription('')
+        // setDescription('')
+        setIndex(0)
 
     }
 
@@ -77,12 +93,12 @@ function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
         setLoading(true)
 
         // Perform validation to check if title and description are not empty
-        if (title.trim() === '' || descriptions.trim() === '' || descriptions.trim() === '<p><br></p>') {
+        if (title.trim() === '') {
             // Display error alert if title or description is empty
 
             setLoading(false)
 
-            return alert('Please enter title and description.');
+            return alert('Please enter title and index.');
 
 
         }
@@ -94,21 +110,22 @@ function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
         } else {
 
             // Make the API call to create faq-help
-            await createFaqHelp(formData);
+            await createMantraCategory(formData);
 
             setTimeout(() => {
 
                 // Display success alert and close the drawer if title and description are not empty
                 setLoading(false)
-                console.log(formData);
-                alert('Form Submitted Successfully...!');
+                // console.log(formData);
+                alert('Data Submitted Successfully...!');
 
                 //after successful refresh the table
                 refreshTable()
 
                 //reset form filed
                 setTitle('')
-                setDescription('')
+                // setDescription('')
+                setIndex(0)
 
                 //close drawer
                 closeDrawer()
@@ -128,8 +145,7 @@ function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
     return (
         <div>
 
-            <Drawer title={isUpdating ? "Update Faq or Help Section" : "Add Faq or Help Section"}
-
+            <Drawer title={isUpdating ? "Update Mantra Category" : "Add Mantra Category"}
                 onClose={resetDrawer} open={openDrawer} maskClosable={false} width={600}>
 
                 <Spin tip="Loading..." size="medium" spinning={loading}>
@@ -145,14 +161,39 @@ function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
                     </div> */}
 
                     <div>
-                        <p style={{ fontSize: '15px' }}>Title</p>
+                        <p style={{ fontSize: '15px' }}>Document Id</p>
                         <Input
-                            placeholder="Enter your question"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
+                            // placeholder="Enter mantra title"
+                            value={drawerData ? drawerData._id : 'null'}
+                            // onChange={(e) => setTitle(e.target.value)}
+                            readOnly
+                            style={{ color: 'gray' }}
                         />
                     </div>
-                    <div style={{ marginTop: '30px' }}>
+
+                    <div>
+                        <p style={{ fontSize: '15px' }}>Title</p>
+                        <Input
+                            placeholder="Enter mantra title"
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
+                            readOnly={action === 'View'}
+                        />
+                    </div>
+
+                    <div>
+                        <p style={{ fontSize: '15px' }}>Index</p>
+                        <Input
+                            placeholder="Enter index no"
+                            value={index}
+                            onChange={(e) => setIndex(e.target.value)}
+                            type='number'
+                            readOnly={action === 'View'}
+
+                        />
+                    </div>
+
+                    {/* <div style={{ marginTop: '30px' }}>
                         <p style={{ fontSize: '15px' }}>Descriptions</p>
                         <ReactQuill
                             placeholder="Enter your question"
@@ -160,20 +201,30 @@ function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
                             value={descriptions}
                             onChange={setDescription}
                         />
-                    </div>
-                    <div style={{ marginTop: '30px' }}>
+                    </div> */}
 
-                        <MyButton
-                            title={isUpdating ? "Update" : "Submit"}
-                            textColor="black"
-                            padding="10px 25px"
-                            borderRadius="10px"
-                            fontSize="12px"
-                            hoverColor="red"
-                            action={buttonClick}
-                        />
+                    {
+                        action != 'View' && (
 
-                    </div>
+
+                            <div style={{ marginTop: '30px' }}>
+
+                                <MyButton
+                                    title={isUpdating ? "Update" : "Submit"}
+                                    textColor="black"
+                                    padding="10px 25px"
+                                    borderRadius="10px"
+                                    fontSize="12px"
+                                    hoverColor="red"
+                                    action={buttonClick}
+                                />
+
+                            </div>
+
+
+                        )
+                    }
+
                 </Spin>
 
 
@@ -183,4 +234,4 @@ function FaqHelpDrawer({ openDrawer, closeDrawer, refreshTable, drawerData }) {
     );
 }
 
-export default FaqHelpDrawer;
+export default MantraCategoryDrawer;

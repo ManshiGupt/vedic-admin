@@ -66,7 +66,6 @@ export const getFaqHelp = async (startDate, endDate, searchText, currentPage, li
 };
 
 
-
 export const deleteFaqHelp = async (id) => {
 
     try {
@@ -80,6 +79,7 @@ export const deleteFaqHelp = async (id) => {
     }
 }
 
+
 export const updateFaqHelp = async (id, formData) => {
 
     try {
@@ -91,6 +91,7 @@ export const updateFaqHelp = async (id, formData) => {
         throw error; // Rethrow the error for the caller to handle
     }
 };
+
 
 export const downloadFaqExcelFile = async (startDate, endDate) => {
     try {
