@@ -3,7 +3,7 @@ import React from 'react'
 function AllPandit() {
   return (
     <div>
-        <h1>All Pandits Table</h1>
+        <h5>All Pandits Table good to go</h5>
     </div>
   )
 }
