@@ -349,6 +349,7 @@ function YoutubeVideoDrawer({ openDrawer, closeDrawer, refreshTable, drawerData,
                         <Select
                             placeholder="Select video file type"
                             value={fileType}
+                            // value={TV}
                             onChange={handleFileTypeChange}
                             style={{ width: '100%' }}
                             showSearch={true}

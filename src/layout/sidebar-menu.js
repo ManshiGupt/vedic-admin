@@ -44,7 +44,7 @@ const SidebarMenu = () => {
 
                     <Menu.Item key="12" icon={<img src="/kumbh-kalash-icon.svg" alt="pooja"
                         style={{ width: 15, height: 15, filter: 'invert(100%)' }} />}>
-                        <Link to="/all-pooja">Poojas</Link>
+                        <Link to="/all-puja">Poojas</Link>
                     </Menu.Item>
 
                     <Menu.Item key="2" icon={<UserOutlined />}>
