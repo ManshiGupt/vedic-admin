@@ -6,6 +6,8 @@ import { createPooja } from "../api/puja-api.js";
 import { Button, Modal } from "antd";
 
 import PoojaModalAdd from "./PoojaModalAdd.js";
+import PoojaCategoryToggle from "./PoojaCategoryToggle.js";
+import PoojaFaq from "./PoojaFaq.js";
 const { TextArea } = Input;
 
 const PujaDrawer = ({
@@ -20,6 +22,7 @@ const PujaDrawer = ({
 
   // State Variables
   const [images, setImages] = useState("");
+  
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [date, setDate] = useState("");
@@ -304,6 +307,32 @@ const PujaDrawer = ({
             readOnly={isReadOnly}
           />
         </div>
+        <div>
+          <p className="py-4">visibility</p>
+          <Input
+            value={visibility}
+            onChange={(e) => setVisibility(e.target.value)}
+            readOnly={isReadOnly}
+          />
+        </div>
+        <div>
+          <p className="py-4">panditNo</p>
+          <Input
+            value={panditNo}
+            onChange={(e) => setPanditNo(e.target.value)}
+            readOnly={isReadOnly}
+          />
+        </div>
+        <div>
+          <p className="py-4">category</p>
+          <Input
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            readOnly={isReadOnly}
+          />
+          <h1><PoojaCategoryToggle/></h1>
+        </div>
+
 
         <div>
           <p className="py-4">Pooja Tag</p>
@@ -335,6 +364,11 @@ const PujaDrawer = ({
         </div>
 
         <div>
+
+          {/* Faq pooja section */}
+         <PoojaFaq faq={faq} pdf ={poojaBookPdf} blog={poojaBlog} action={handleDeleteFaq} setFaq={setFaq} isReadOnly={isReadOnly}/>
+
+          {/* <PoojaFaq/> */}
           <div className="bg-gray-500 my-2 text-white py-4 px-2 ">
             <div className="flex justify-between ">
               <div>
@@ -366,12 +400,7 @@ const PujaDrawer = ({
                 onChange={(e) => setFaqTitle(e.target.value)}
                 className="my-2"
               />
-              {/* <Input
-                placeholder="Index"
-                value={faqIndex}
-                onChange={(e) => setFaqIndex(Number(e.target.value))}
-                className="my-2"
-              /> */}
+
               <TextArea
                 placeholder="Description"
                 value={faqDescription}
@@ -381,20 +410,11 @@ const PujaDrawer = ({
             </Modal>
           </div>
 
-          {faq.map((item, index) => (
+          
+
+          {faq.map((item, index, arr) => (
             <div key={title} className="space-y-2">
-              {/* <Input
-                placeholder="index"
-                value={item.index}
-                onChange={(e) =>
-                  setFaq(
-                    faq.map((f, i) =>
-                      i === index ? { ...f, index: e.target.value } : f
-                    )
-                  )
-                }
-                readOnly={isReadOnly}
-              /> */}
+             {console.log("td",item)}
               <Input
                 placeholder="Title"
                 value={item.title}
@@ -420,7 +440,7 @@ const PujaDrawer = ({
                 }
               />
               <div>
-              {action == "Edit"  && (
+              {arr.length >0  && (
                 <button
                   className="justify-end text-white border-solid border-2 rounded-lg p-2 my-2 w-24 bg-slate-500"
                   onClick={() => handleDeleteFaq(item.title)}
@@ -474,7 +494,7 @@ const PujaDrawer = ({
                 /> */}
               </Modal>
             </div>
-            {poojaBookPdf.map((item, index) => (
+            {poojaBookPdf.map((item, index, arr) => (
               <div key={title}>
                 {/* <Input
                   placeholder="index"
@@ -512,8 +532,9 @@ const PujaDrawer = ({
                     )
                   }
                 />
+                
                 {
-                  (action = "Edit" && (
+                  ( arr.length >0 && (
                     <button
                       className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500"
                       onClick={() => handleDeletePdf(item.title)}
@@ -570,7 +591,7 @@ const PujaDrawer = ({
               />
             </Modal>
           </div>
-          {poojaBlog.map((item) => (
+          {poojaBlog.map((item, index, arr) => (
             <div key={title}>
               {console.log("Pooja Blog", item)}
               {/* <Input
@@ -621,7 +642,7 @@ const PujaDrawer = ({
                 readOnly={isReadOnly}
               />
               {
-                (action = "Edit" && (
+                (arr.length >0 && (
                   <button
                     className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500"
                     onClick={() => handleDeleteBlog(item, poojaBlog)}

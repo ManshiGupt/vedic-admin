@@ -53,9 +53,7 @@ const AllPuja = () => {
       ellipsis: true,
     },
     {
-      title: "Price",
-      children: [
-        {
+     
           title: "minPrice",
           dataIndex: "minPrice",
           key: "minPrice",
@@ -66,8 +64,8 @@ const AllPuja = () => {
           dataIndex: "maxPrice",
           key: "maxPrice",
           ellipsis: true,
-        },
-      ],
+        
+     
     },
     {
       title: "Action",
