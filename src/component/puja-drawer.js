@@ -8,6 +8,8 @@ import { Button, Modal } from "antd";
 import PoojaModalAdd from "./PoojaModalAdd.js";
 import PoojaCategoryToggle from "./PoojaCategoryToggle.js";
 import PoojaFaq from "./PoojaFaq.js";
+import PoojaPdf from "./PoojaPdf.js";
+import PoojaBlog from "./PoojaBlog.js";
 const { TextArea } = Input;
 
 const PujaDrawer = ({
@@ -238,8 +240,8 @@ const PujaDrawer = ({
     const f = poojaBookPdf.filter((data) => data.title !== title);
     setPoojaBookPdf(f);
   };
-  const handleDeleteBlog = async (deletePooja, poojaBlog) => {
-    const f = poojaBlog.filter((data) => data !== deletePooja);
+  const handleDeleteBlog = async (title) => {
+    const f = poojaBlog.filter((data) => data.title !== title);
     setPoojaBlog(f);
   };
 
@@ -366,7 +368,7 @@ const PujaDrawer = ({
         <div>
 
           {/* Faq pooja section */}
-         <PoojaFaq faq={faq} pdf ={poojaBookPdf} blog={poojaBlog} action={handleDeleteFaq} setFaq={setFaq} isReadOnly={isReadOnly}/>
+        
 
           {/* <PoojaFaq/> */}
           <div className="bg-gray-500 my-2 text-white py-4 px-2 ">
@@ -411,46 +413,8 @@ const PujaDrawer = ({
           </div>
 
           
-
-          {faq.map((item, index, arr) => (
-            <div key={title} className="space-y-2">
-             {console.log("td",item)}
-              <Input
-                placeholder="Title"
-                value={item.title}
-                onChange={(e) =>
-                  setFaq(
-                    faq.map((f, i) =>
-                      i === index ? { ...f, title: e.target.value } : f
-                    )
-                  )
-                }
-                readOnly={isReadOnly}
-              />
-
-              <TextArea
-                placeholder="Description"
-                value={item.descriptions}
-                onChange={(e) =>
-                  setFaq(
-                    faq.map((f, i) =>
-                      i === index ? { ...f, descriptions: e.target.value } : f
-                    )
-                  )
-                }
-              />
-              <div>
-              {arr.length >0  && (
-                <button
-                  className="justify-end text-white border-solid border-2 rounded-lg p-2 my-2 w-24 bg-slate-500"
-                  onClick={() => handleDeleteFaq(item.title)}
-                >
-                  Delete
-                </button>
-              )}
-              </div>
-            </div>
-          ))}
+          <PoojaFaq faq={faq} pdf ={poojaBookPdf} blog={poojaBlog} action={handleDeleteFaq} setFaq={setFaq} isReadOnly={isReadOnly}/>
+         
 
           <div>
 
@@ -486,65 +450,13 @@ const PujaDrawer = ({
                   onChange={(e) => setPdfUrl(e.target.value)}
                   className="my-2"
                 />
-                {/* <TextArea
-                  placeholder="Index"
-                  value={pdfIndex}
-                  onChange={(e) => setPdfIndex(e.target.value)}
-                  className="my-2"
-                /> */}
+              
               </Modal>
             </div>
-            {poojaBookPdf.map((item, index, arr) => (
-              <div key={title}>
-                {/* <Input
-                  placeholder="index"
-                  value={item.index}
-                  onChange={(e) =>
-                    setPoojaBookPdf(
-                      poojaBookPdf.map((f, i) =>
-                        i === index ? { ...f, index: e.target.value } : f
-                      )
-                    )
-                  }
-                  readOnly={isReadOnly}
-                /> */}
-                <Input
-                  placeholder="Title"
-                  value={item.title}
-                  onChange={(e) =>
-                    setPoojaBookPdf(
-                      poojaBookPdf.map((f, i) =>
-                        i === index ? { ...f, title: e.target.value } : f
-                      )
-                    )
-                  }
-                  readOnly={isReadOnly}
-                />
 
-                <TextArea
-                  placeholder="PdfUrl"
-                  value={item.pdfUrl}
-                  onChange={(e) =>
-                    setPoojaBookPdf(
-                      poojaBookPdf.map((f, i) =>
-                        i === index ? { ...f, pdfUrl: e.target.value } : f
-                      )
-                    )
-                  }
-                />
-                
-                {
-                  ( arr.length >0 && (
-                    <button
-                      className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500"
-                      onClick={() => handleDeletePdf(item.title)}
-                    >
-                      Delete
-                    </button>
-                  ))
-                }
-              </div>
-            ))}
+           
+            <PoojaPdf pdf={poojaBookPdf} action={handleDeletePdf} setPdf={setPoojaBookPdf} isReadOnly/>
+            
           </div>
 
           <div className="bg-gray-500 my-2 text-white py-4 flex justify-between px-2">
@@ -564,12 +476,7 @@ const PujaDrawer = ({
               onOk={handleBlogSubmit}
               onCancel={() => setIsModalBlogOpen(false)}
             >
-              {/* <Input
-                placeholder="Index"
-                value={blogIndex}
-                onChange={(e) => setBlogIndex(Number(e.target.value))}
-                className="my-2"
-              /> */}
+             
               <Input
                 placeholder="Title"
                 value={blogTitle}
@@ -591,68 +498,9 @@ const PujaDrawer = ({
               />
             </Modal>
           </div>
-          {poojaBlog.map((item, index, arr) => (
-            <div key={title}>
-              {console.log("Pooja Blog", item)}
-              {/* <Input
-                placeholder="index"
-                value={item.index}
-                onChange={(e) =>
-                  setPoojaBlog(
-                    poojaBlog.map((f, i) =>
-                      i === index ? { ...f, index: e.target.value } : f
-                    )
-                  )
-                }
-                readOnly={isReadOnly}
-              /> */}
-              <Input
-                placeholder="Title"
-                value={item.title}
-                onChange={(e) =>
-                  setPoojaBlog(
-                    poojaBlog.map((f, i) =>
-                      i === index ? { ...f, title: e.target.value } : f
-                    )
-                  )
-                }
-                readOnly={isReadOnly}
-              />
-              <TextArea
-                placeholder="PageUrl"
-                value={item.pageUrl}
-                onChange={(e) =>
-                  setPoojaBlog(
-                    poojaBlog.map((f, i) =>
-                      i === index ? { ...f, pageUrl: e.target.value } : f
-                    )
-                  )
-                }
-              />
-              <Input
-                placeholder="Thumbnail"
-                value={item.thumbnail}
-                onChange={(e) =>
-                  setPoojaBlog(
-                    poojaBlog.map((f, i) =>
-                      i === index ? { ...f, thumbnail: e.target.value } : f
-                    )
-                  )
-                }
-                readOnly={isReadOnly}
-              />
-              {
-                (arr.length >0 && (
-                  <button
-                    className="justify-end text-white border-solid border-2 rounded-lg p-2 mb-5 mt-2 w-24 bg-slate-500"
-                    onClick={() => handleDeleteBlog(item, poojaBlog)}
-                  >
-                    Delete
-                  </button>
-                ))
-              }
-            </div>
-          ))}
+
+          <PoojaBlog poojaBlog={poojaBlog} action={handleDeleteBlog} setBlog={setPoojaBlog} isReadOnly={isReadOnly} />
+          
         </div>
 
         {action !== "View" && (

@@ -2,19 +2,18 @@ import React from 'react'
 import { Drawer, Input, Spin, message } from "antd";
 const { TextArea } = Input;
 
-
-const PoojaFaq = ({faq, pdf, blog, action, setFaq, isReadOnly}) => {
+const PoojaPdf = ({ pdf, action, setPdf, isReadOnly}) => {
   return (
     <div>
-        {faq.map((item, index, arr) => (
+        {pdf.map((item, index, arr) => (
             <div key={item.title} className="space-y-2">
              {console.log("td",item)}
               <Input
                 placeholder="Title"
                 value={item.title}
                 onChange={(e) =>
-                  setFaq(
-                    faq.map((f, i) =>
+                    setPdf(
+                    pdf.map((f, i) =>
                       i === index ? { ...f, title: e.target.value } : f
                     )
                   )
@@ -23,12 +22,12 @@ const PoojaFaq = ({faq, pdf, blog, action, setFaq, isReadOnly}) => {
               />
 
               <TextArea
-                placeholder="Description"
-                value={item.descriptions}
+                placeholder="pdfUrl"
+                value={item.pdfUrl}
                 onChange={(e) =>
-                  setFaq(
-                    faq.map((f, i) =>
-                      i === index ? { ...f, descriptions: e.target.value } : f
+                    setPdf(
+                    pdf.map((f, i) =>
+                      i === index ? { ...f, pdfUrl: e.target.value } : f
                     )
                   )
                 }
@@ -49,6 +48,4 @@ const PoojaFaq = ({faq, pdf, blog, action, setFaq, isReadOnly}) => {
   )
 }
 
-export default PoojaFaq
-
-
+export default PoojaPdf

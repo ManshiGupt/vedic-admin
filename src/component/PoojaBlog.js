@@ -2,19 +2,18 @@ import React from 'react'
 import { Drawer, Input, Spin, message } from "antd";
 const { TextArea } = Input;
 
-
-const PoojaFaq = ({faq, pdf, blog, action, setFaq, isReadOnly}) => {
+const PoojaBlog = ({ poojaBlog, action, setBlog, isReadOnly}) => {
   return (
     <div>
-        {faq.map((item, index, arr) => (
+        {poojaBlog.map((item, index, arr) => (
             <div key={item.title} className="space-y-2">
              {console.log("td",item)}
               <Input
                 placeholder="Title"
                 value={item.title}
                 onChange={(e) =>
-                  setFaq(
-                    faq.map((f, i) =>
+                    setBlog(
+                        poojaBlog.map((f, i) =>
                       i === index ? { ...f, title: e.target.value } : f
                     )
                   )
@@ -23,15 +22,28 @@ const PoojaFaq = ({faq, pdf, blog, action, setFaq, isReadOnly}) => {
               />
 
               <TextArea
-                placeholder="Description"
-                value={item.descriptions}
+                placeholder="pageUrl"
+                value={item.pageUrl}
                 onChange={(e) =>
-                  setFaq(
-                    faq.map((f, i) =>
-                      i === index ? { ...f, descriptions: e.target.value } : f
+                    setBlog(
+                        poojaBlog.map((f, i) =>
+                      i === index ? { ...f, pageUrl: e.target.value } : f
                     )
                   )
                 }
+              />
+
+<Input
+                placeholder="thumbnail"
+                value={item.thumbnail}
+                onChange={(e) =>
+                    setBlog(
+                        poojaBlog.map((f, i) =>
+                      i === index ? { ...f, thumbnail: e.target.value } : f
+                    )
+                  )
+                }
+                readOnly={isReadOnly}
               />
               <div>
               {arr.length >0  && (
@@ -49,6 +61,4 @@ const PoojaFaq = ({faq, pdf, blog, action, setFaq, isReadOnly}) => {
   )
 }
 
-export default PoojaFaq
-
-
+export default PoojaBlog
