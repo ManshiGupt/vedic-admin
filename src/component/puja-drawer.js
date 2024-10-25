@@ -266,6 +266,9 @@ const PujaDrawer = ({
         <div>
           {/*        
         <PoojaModalAdd/> */}
+         <div className="bg-gray-500 my-2 text-white py-4 px-2 ">
+          Basic Pooja Details
+         </div>
         <div className="flex">
           
           <p className="py-4">Title</p>
@@ -294,7 +297,7 @@ const PujaDrawer = ({
 
         <div>
           <p className="py-4">Subtitle</p>
-          <Input
+          <TextArea
             value={subtitle}
             onChange={(e) => setSubtitle(e.target.value)}
             readOnly={isReadOnly}
