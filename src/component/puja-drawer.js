@@ -10,6 +10,7 @@ import PoojaCategoryToggle from "./PoojaCategoryToggle.js";
 import PoojaFaq from "./PoojaFaq.js";
 import PoojaPdf from "./PoojaPdf.js";
 import PoojaBlog from "./PoojaBlog.js";
+import Demos from "./Demos.js";
 const { TextArea } = Input;
 
 const PujaDrawer = ({
@@ -266,6 +267,7 @@ const PujaDrawer = ({
         <div>
           {/*        
         <PoojaModalAdd/> */}
+
          <div className="bg-gray-500 my-2 text-white py-4 px-2 ">
           Basic Pooja Details
          </div>
@@ -297,7 +299,7 @@ const PujaDrawer = ({
 
         <div>
           <p className="py-4">Subtitle</p>
-          <TextArea
+          <Input
             value={subtitle}
             onChange={(e) => setSubtitle(e.target.value)}
             readOnly={isReadOnly}
@@ -328,6 +330,7 @@ const PujaDrawer = ({
             readOnly={isReadOnly}
           />
         </div>
+        <Demos/>
         <div>
           <p className="py-4">category</p>
           <Input
