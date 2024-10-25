@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, Input, Spin, message } from "antd";
+import { Drawer, Input, Spin, message,Collapse } from "antd";
 import MyButton from "../ui/button.js";
 import { updatePooja } from "../api/puja-api.js";
 import { createPooja } from "../api/puja-api.js";
@@ -10,9 +10,8 @@ import PoojaCategoryToggle from "./PoojaCategoryToggle.js";
 import PoojaFaq from "./PoojaFaq.js";
 import PoojaPdf from "./PoojaPdf.js";
 import PoojaBlog from "./PoojaBlog.js";
-import Demos from "./Demos.js";
 const { TextArea } = Input;
-
+const { Panel } = Collapse;
 const PujaDrawer = ({
   openDrawer,
   closeDrawer,
@@ -56,6 +55,8 @@ const PujaDrawer = ({
   const [blogIndex, setBlogIndex] = useState("");
   const [isModalPdfOpen, setIsModalPdfOpen] = useState(false);
   const [isModalBlogOpen, setIsModalBlogOpen] = useState(false);
+  const[showFaq ,setShowFaq]= useState(false);
+  const [activePanel, setActivePanel] = useState(null);
   //  const[showPdfModal, setshowPdfModal]
 
   useEffect(() => {
@@ -145,6 +146,11 @@ const PujaDrawer = ({
   const showBlogModal = () => {
     setIsModalBlogOpen(true);
   };
+ 
+  const handlePanelChange = (key) => {
+    setActivePanel(key); // Toggle FAQ panel visibility
+  };
+
 
   const handleSubmit = async () => {
     const errorMessage = validateForm();
@@ -264,13 +270,14 @@ const PujaDrawer = ({
       className="space-y-4"
     >
       <Spin spinning={loading}>
-        <div>
+      
           {/*        
         <PoojaModalAdd/> */}
-
-         <div className="bg-gray-500 my-2 text-white py-4 px-2 ">
-          Basic Pooja Details
-         </div>
+        
+         
+          <Collapse onChange={handlePanelChange}  accordion>
+        {/* Basic Pooja Details */}
+        <Panel header="Basic Pooja Details" className="bg-gray-200 text-gray py-4 px-2">
         <div className="flex">
           
           <p className="py-4">Title</p>
@@ -280,7 +287,7 @@ const PujaDrawer = ({
             onChange={(e) => setTitle(e.target.value)}
             readOnly={isReadOnly}
           />
-        </div>
+      
 
         <div>
           <p className="py-4">Images</p>
@@ -299,7 +306,7 @@ const PujaDrawer = ({
 
         <div>
           <p className="py-4">Subtitle</p>
-          <Input
+          <TextArea
             value={subtitle}
             onChange={(e) => setSubtitle(e.target.value)}
             readOnly={isReadOnly}
@@ -330,7 +337,6 @@ const PujaDrawer = ({
             readOnly={isReadOnly}
           />
         </div>
-        <Demos/>
         <div>
           <p className="py-4">category</p>
           <Input
@@ -370,17 +376,18 @@ const PujaDrawer = ({
             readOnly={isReadOnly}
           />
         </div>
-
+        </Panel>
         <div>
 
           {/* Faq pooja section */}
         
 
           {/* <PoojaFaq/> */}
+          <Panel header="FAQs" key="1" className="bg-gray-200 text-gray py-4 px-2">
           <div className="bg-gray-500 my-2 text-white py-4 px-2 ">
             <div className="flex justify-between ">
               <div>
-               
+              
                 <p>FAQ</p>
               </div>
 
@@ -420,8 +427,18 @@ const PujaDrawer = ({
 
           
           <PoojaFaq faq={faq} pdf ={poojaBookPdf} blog={poojaBlog} action={handleDeleteFaq} setFaq={setFaq} isReadOnly={isReadOnly}/>
+          {activePanel === "1" && (
+          <PoojaFaq
+            faq={faq}
+            pdf={poojaBookPdf}
+            blog={poojaBlog}
+            action={handleDeleteFaq}
+            setFaq={setFaq}
+            isReadOnly={isReadOnly}
+          />
+        )}
          
-
+         </Panel>
           <div>
 
 
@@ -508,7 +525,7 @@ const PujaDrawer = ({
           <PoojaBlog poojaBlog={poojaBlog} action={handleDeleteBlog} setBlog={setPoojaBlog} isReadOnly={isReadOnly} />
           
         </div>
-
+        </Collapse>
         {action !== "View" && (
           <div style={{ marginTop: "30px" }}>
             <MyButton
