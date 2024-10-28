@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, Input, Spin, message,Collapse } from "antd";
+import { Drawer, Input, Spin, message, Collapse } from "antd";
 import MyButton from "../ui/button.js";
 import { updatePooja } from "../api/puja-api.js";
 import { createPooja } from "../api/puja-api.js";
@@ -10,6 +10,8 @@ import PoojaCategoryToggle from "./PoojaCategoryToggle.js";
 import PoojaFaq from "./PoojaFaq.js";
 import PoojaPdf from "./PoojaPdf.js";
 import PoojaBlog from "./PoojaBlog.js";
+import FeedbackPoojaId from "./FeedbackPoojaId.js";
+import PanditByPooojaId from "./PanditByPooojaId.js";
 const { TextArea } = Input;
 const { Panel } = Collapse;
 const PujaDrawer = ({
@@ -24,7 +26,7 @@ const PujaDrawer = ({
 
   // State Variables
   const [images, setImages] = useState("");
-  
+
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
   const [date, setDate] = useState("");
@@ -55,7 +57,7 @@ const PujaDrawer = ({
   const [blogIndex, setBlogIndex] = useState("");
   const [isModalPdfOpen, setIsModalPdfOpen] = useState(false);
   const [isModalBlogOpen, setIsModalBlogOpen] = useState(false);
-  const[showFaq ,setShowFaq]= useState(false);
+  const [showFaq, setShowFaq] = useState(false);
   const [activePanel, setActivePanel] = useState(null);
   //  const[showPdfModal, setshowPdfModal]
 
@@ -80,11 +82,10 @@ const PujaDrawer = ({
       setPoojaBlog(drawerData.poojaBlog || []);
 
       setIsUpdating(action === "Edit");
-
-      
     }
   }, [drawerData]);
 
+  
   const validateForm = () => {
     if (!title.trim()) return "Title is required.";
     if (!subtitle.trim()) return "Subtitle is required.";
@@ -146,12 +147,11 @@ const PujaDrawer = ({
   const showBlogModal = () => {
     setIsModalBlogOpen(true);
   };
- 
+
   const handlePanelChange = (key) => {
     setActivePanel(key); // Toggle FAQ panel visibility
   };
-
-
+  console.log("loo "+ drawerData._id)
   const handleSubmit = async () => {
     const errorMessage = validateForm();
     if (errorMessage) {
@@ -210,7 +210,7 @@ const PujaDrawer = ({
   const handlePdfSubmit = async () => {
     const newPoojaBookPdf = {
       title: pdfTitle,
-      pdfUrl: pdfUrl
+      pdfUrl: pdfUrl,
     };
     setPoojaBookPdf([...poojaBookPdf, newPoojaBookPdf]);
     // resetDrawer();
@@ -224,7 +224,6 @@ const PujaDrawer = ({
       title: blogTitle,
       pageUrl: blogUrl,
       thumbnail: blogThumbnail,
-      
     };
     setPoojaBlog([...poojaBlog, newPoojaBookBlog]);
     // resetDrawer();
@@ -234,15 +233,12 @@ const PujaDrawer = ({
   };
 
   const handleDeleteFaq = async (title) => {
-    // alert(index.title);
+   
     const f = faq.filter((data) => data.title !== title);
     setFaq(f);
-    // console.log("ka", setFaq(f));
+    
   };
-  // const handleDeletePdf = async (deletePooja) => {
-  //   const f = poojaBookPdf.filter((data) => data !== deletePooja);
-  //   setPoojaBookPdf(f);
-  // };
+  
   const handleDeletePdf = async (title) => {
     const f = poojaBookPdf.filter((data) => data.title !== title);
     setPoojaBookPdf(f);
@@ -270,262 +266,303 @@ const PujaDrawer = ({
       className="space-y-4"
     >
       <Spin spinning={loading}>
-      
-          {/*        
+        {/*        
         <PoojaModalAdd/> */}
-        
-         
-          <Collapse onChange={handlePanelChange}  accordion>
-        {/* Basic Pooja Details */}
-        <Panel header="Basic Pooja Details" className="bg-gray-200 text-gray py-4 px-2">
-        <div className="flex">
+
+        <Collapse onChange={handlePanelChange} accordion>
           
-          <p className="py-4">Title</p>
-          </div>
-          <Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            readOnly={isReadOnly}
-          />
-      
-
-        <div>
-          <p className="py-4">Images</p>
-          <Input
-            value={images}
-            onChange={(e) => setImages(e.target.value)}
-            readOnly={isReadOnly}
-          />
-        </div>
-
-        {images != "" && 
-        <div className="h-auto w-{100%} object-fill py-4">
-          <img src={images} alt="image preview" className=""/>
-          
-        </div> }
-
-        <div>
-          <p className="py-4">Subtitle</p>
-          <TextArea
-            value={subtitle}
-            onChange={(e) => setSubtitle(e.target.value)}
-            readOnly={isReadOnly}
-          />
-        </div>
-
-        <div>
-          <p className="py-4">Date</p>
-          <Input
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            readOnly={isReadOnly}
-          />
-        </div>
-        <div>
-          <p className="py-4">visibility</p>
-          <Input
-            value={visibility}
-            onChange={(e) => setVisibility(e.target.value)}
-            readOnly={isReadOnly}
-          />
-        </div>
-        <div>
-          <p className="py-4">panditNo</p>
-          <Input
-            value={panditNo}
-            onChange={(e) => setPanditNo(e.target.value)}
-            readOnly={isReadOnly}
-          />
-        </div>
-        <div>
-          <p className="py-4">category</p>
-          <Input
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            readOnly={isReadOnly}
-          />
-          <h1><PoojaCategoryToggle/></h1>
-        </div>
-
-
-        <div>
-          <p className="py-4">Pooja Tag</p>
-          <Input
-            value={poojaTag}
-            onChange={(e) => setPoojaTag(e.target.value)}
-            readOnly={isReadOnly}
-          />
-        </div>
-
-        <div>
-          <p className="py-4">Pooja Duration (in hours)</p>
-          <Input
-            type="number"
-            value={poojaDuration}
-            onChange={(e) => setPoojaDuration(Number(e.target.value))}
-            readOnly={isReadOnly}
-          />
-        </div>
-
-        <div>
-          <p className="py-4">About Pooja</p>
-          <TextArea
-            rows={4}
-            value={aboutPooja}
-            onChange={(e) => setAboutPooja(e.target.value)}
-            readOnly={isReadOnly}
-          />
-        </div>
-        </Panel>
-        <div>
-
-          {/* Faq pooja section */}
-        
-
-          {/* <PoojaFaq/> */}
-          <Panel header="FAQs" key="1" className="bg-gray-200 text-gray py-4 px-2">
-          <div className="bg-gray-500 my-2 text-white py-4 px-2 ">
-            <div className="flex justify-between ">
-              <div>
-              
-                <p>FAQ</p>
-              </div>
-
-              <div>
-                {action !== "View" && (
-                  <Button
-                    type="primary"
-                    className="bg-white text-gray-700 hover:bg-gray-500 shadow-lg"
-                    onClick={showModal}
-                  >
-                    Add new
-                  </Button>
-                )}
-              </div>
+          <Panel
+            header="Basic Pooja Details"
+            className="bg-gray-200 text-gray py-4 px-2"
+          >
+            <div className="flex">
+              <p className="py-4">Title</p>
             </div>
-            <Modal
-              title="Add New FAQ"
-              open={isModalOpen}
-              onOk={handleFaqSubmit}
-              onCancel={() => setIsModalOpen(false)}
-            >
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              readOnly={isReadOnly}
+            />
+
+            <div>
+              <p className="py-4">Images</p>
               <Input
-                placeholder="Title"
-                value={faqTitle}
-                onChange={(e) => setFaqTitle(e.target.value)}
-                className="my-2"
+                value={images}
+                onChange={(e) => setImages(e.target.value)}
+                readOnly={isReadOnly}
               />
+            </div>
 
+            {images != "" && (
+              <div className="h-auto w-{100%} object-fill py-4">
+                <img src={images} alt="image preview" className="" />
+              </div>
+            )}
+
+            <div>
+              <p className="py-4">Subtitle</p>
               <TextArea
-                placeholder="Description"
-                value={faqDescription}
-                onChange={(e) => setFaqDescription(e.target.value)}
-                className="my-2"
+                value={subtitle}
+                onChange={(e) => setSubtitle(e.target.value)}
+                readOnly={isReadOnly}
               />
-            </Modal>
-          </div>
+            </div>
 
-          
-          <PoojaFaq faq={faq} pdf ={poojaBookPdf} blog={poojaBlog} action={handleDeleteFaq} setFaq={setFaq} isReadOnly={isReadOnly}/>
-          {activePanel === "1" && (
-          <PoojaFaq
-            faq={faq}
-            pdf={poojaBookPdf}
-            blog={poojaBlog}
-            action={handleDeleteFaq}
-            setFaq={setFaq}
-            isReadOnly={isReadOnly}
-          />
-        )}
-         
-         </Panel>
+            <div>
+              <p className="py-4">Date (optional)</p>
+              <Input
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                readOnly={isReadOnly}
+              />
+            </div>
+            <div>
+              <p className="py-4">visibility</p>
+              <Input
+                value={visibility}
+                onChange={(e) => setVisibility(e.target.value)}
+                readOnly={isReadOnly}
+              />
+            </div>
+            <div>
+              <p className="py-4">panditNo</p>
+              <Input
+                value={panditNo}
+                onChange={(e) => setPanditNo(e.target.value)}
+                readOnly={isReadOnly}
+              />
+            </div>
+            <div>
+              <p className="py-4">category</p>
+              <Input
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                readOnly={isReadOnly}
+              />
+              <h1>
+                <PoojaCategoryToggle />
+              </h1>
+            </div>
+
+            <div>
+              <p className="py-4">Pooja Tag</p>
+              <Input
+                value={poojaTag}
+                onChange={(e) => setPoojaTag(e.target.value)}
+                readOnly={isReadOnly}
+              />
+            </div>
+
+            <div>
+              <p className="py-4">Pooja Duration (in hours)</p>
+              <Input
+                type="number"
+                value={poojaDuration}
+                onChange={(e) => setPoojaDuration(Number(e.target.value))}
+                readOnly={isReadOnly}
+              />
+            </div>
+
+            <div>
+              <p className="py-4">About Pooja</p>
+              <TextArea
+                rows={4}
+                value={aboutPooja}
+                onChange={(e) => setAboutPooja(e.target.value)}
+                readOnly={isReadOnly}
+              />
+            </div>
+          </Panel>
           <div>
+            {/* Faq pooja section */}
 
+            
 
-            {/* Pooja Book PDF */}
-            <div className="bg-gray-500 my-2 text-white py-4 flex justify-between px-2">
-              <p>Pooja Book Pdf</p>
-              {action !== "View" && (
-                <Button
-                  type="primary"
-                  className="bg-white text-gray-700 hover:bg-gray-500 shadow-lg"
-                  onClick={showPdfModal}
-                >
-                  Add new
-                </Button>
-              )}
-
+            <div className="faq-section">
               <Modal
-                title="Add New Pooja Book Pdf"
-                open={isModalPdfOpen}
-                onOk={handlePdfSubmit}
-                onCancel={() => setIsModalPdfOpen(false)}
+                title="Add New FAQ"
+                open={isModalOpen}
+                onOk={handleFaqSubmit}
+                onCancel={() => setIsModalOpen(false)}
               >
                 <Input
                   placeholder="Title"
-                  value={pdfTitle}
-                  onChange={(e) => setPdfTitle(e.target.value)}
+                  value={faqTitle}
+                  onChange={(e) => setFaqTitle(e.target.value)}
                   className="my-2"
                 />
-                <Input
-                  placeholder="Url"
-                  value={pdfUrl}
-                  onChange={(e) => setPdfUrl(e.target.value)}
+                <TextArea
+                  placeholder="Description"
+                  value={faqDescription}
+                  onChange={(e) => setFaqDescription(e.target.value)}
                   className="my-2"
                 />
-              
               </Modal>
             </div>
 
-           
-            <PoojaPdf pdf={poojaBookPdf} action={handleDeletePdf} setPdf={setPoojaBookPdf} isReadOnly/>
-            
-          </div>
-
-          <div className="bg-gray-500 my-2 text-white py-4 flex justify-between px-2">
-            <p>Pooja Blog</p>
-            {action !== "View" && (
-              <Button
-                type="primary"
-                className="bg-white text-gray-700 hover:bg-gray-500 shadow-lg"
-                onClick={showBlogModal}
+            {/* Collapsible FAQ list */}
+            <Collapse accordion>
+              <Panel
+                header={
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <span>FAQ </span>
+                    {action !== "View" && (
+                      <Button
+                        
+                        className="bg-white text-gray-700 hover:bg-gray-500 "
+                        onClick={() => setIsModalOpen(true)}
+                      >
+                        Add New
+                      </Button>
+                    )}
+                  </div>
+                }
               >
-                Add new
-              </Button>
-            )}
-            <Modal
-              title="Add New Pooja Blog"
-              open={isModalBlogOpen}
-              onOk={handleBlogSubmit}
-              onCancel={() => setIsModalBlogOpen(false)}
-            >
+                <PoojaFaq
+                  faq={faq}
+                  action={handleDeleteFaq}
+                  setFaq={setFaq}
+                  isReadOnly={action === "View"}
+                />
+              </Panel>
+            
+            </Collapse>
+
+            <div>
+              {/* Pooja Book PDF */}
+              <div className="">
+                
+
+                <Modal
+                  title="Add New Pooja Book Pdf"
+                  open={isModalPdfOpen}
+                  onOk={handlePdfSubmit}
+                  onCancel={() => setIsModalPdfOpen(false)}
+                >
+                  <Input
+                    placeholder="Title"
+                    value={pdfTitle}
+                    onChange={(e) => setPdfTitle(e.target.value)}
+                    className="my-2"
+                  />
+                  <Input
+                    placeholder="Url"
+                    value={pdfUrl}
+                    onChange={(e) => setPdfUrl(e.target.value)}
+                    className="my-2"
+                  />
+                </Modal>
+              </div>
+
+              <Collapse accordion>
+                <Panel
+                  header={
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <span>PDF </span>
+                      {action !== "View" && (
+                        <Button
+                          type="primary"
+                          className="bg-white text-gray-700 hover:bg-gray-500 "
+                          onClick={showPdfModal}
+                        >
+                          Add new
+                        </Button>
+                      )}
+                    </div>
+                  }
+                >
+                  <PoojaPdf
+                    pdf={poojaBookPdf}
+                    action={handleDeletePdf}
+                    setPdf={setPoojaBookPdf}
+                    isReadOnly
+                  />
+                </Panel>
+                {/* </div> */}
+              </Collapse>
+            </div>
+{/* blog */}
+            {/* <div className=" py-4"> */}
              
-              <Input
-                placeholder="Title"
-                value={blogTitle}
-                onChange={(e) => setBlogTitle(e.target.value)}
-                className="my-2"
-              />
 
-              <Input
-                placeholder="Thumbnail"
-                value={blogThumbnail}
-                onChange={(e) => setBlogThumbnail(e.target.value)}
-                className="my-2"
-              />
-              <TextArea
-                placeholder="Url"
-                value={blogUrl}
-                onChange={(e) => setBlogUrl(e.target.value)}
-                className="my-2"
-              />
-            </Modal>
-          </div>
+              <Modal
+                title="Add New Pooja Blog"
+                open={isModalBlogOpen}
+                onOk={handleBlogSubmit}
+                onCancel={() => setIsModalBlogOpen(false)}
+              >
+                <Input
+                  placeholder="Title"
+                  value={blogTitle}
+                  onChange={(e) => setBlogTitle(e.target.value)}
+                  className="my-2"
+                />
 
-          <PoojaBlog poojaBlog={poojaBlog} action={handleDeleteBlog} setBlog={setPoojaBlog} isReadOnly={isReadOnly} />
-          
-        </div>
+                <Input
+                  placeholder="Thumbnail"
+                  value={blogThumbnail}
+                  onChange={(e) => setBlogThumbnail(e.target.value)}
+                  className="my-2"
+                />
+                <TextArea
+                  placeholder="Url"
+                  value={blogUrl}
+                  onChange={(e) => setBlogUrl(e.target.value)}
+                  className="my-2"
+                />
+              </Modal>
+            </div>
+
+            <Panel
+              header={
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <span>Blog </span>
+                  {action !== "View" && (
+                    <Button
+                      type="primary"
+                      className="bg-white text-gray-700 hover:bg-gray-500 "
+                      onClick={showBlogModal}
+                    >
+                      Add new
+                    </Button>
+                  )}
+                </div>
+              }
+            >
+            <PoojaBlog
+              poojaBlog={poojaBlog}
+              action={handleDeleteBlog}
+              setBlog={setPoojaBlog}
+              isReadOnly={isReadOnly}
+            />
+            </Panel>
+          {/* </div> */}
         </Collapse>
+
+
+<FeedbackPoojaId  drawerData={drawerData._id} />
+<PanditByPooojaId/>
+
+{console.log("lo "+ drawerData._id)}
+
         {action !== "View" && (
           <div style={{ marginTop: "30px" }}>
             <MyButton
