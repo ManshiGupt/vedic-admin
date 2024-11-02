@@ -1,7 +1,7 @@
 import axios from "axios";
 import { myServerUrl } from "../support/api-helper";
 
-export const getPoojaByPanditId= (searchText, category, currentPage = 1, limit = 10)=>{
+export const getPoojaByPanditId = async(searchText, category, currentPage = 1, limit = 10, poojaId)=>{
 
     try {
         const data={
@@ -9,8 +9,10 @@ export const getPoojaByPanditId= (searchText, category, currentPage = 1, limit =
                 searchText, category, currentPage, limit 
             }
         }
-        const response = axios.get(`${myServerUrl.url}/get-pandit-by-pooja/:poojaId`, data)
-        console.log("response", response.data.data)
+        const response = await axios.get(`${myServerUrl.url}/get-pandit-by-pooja/${poojaId}`, data)
+        console.log("response loi", response.data.data)
+
+        return response.data.data
 
     } catch (error) {
 

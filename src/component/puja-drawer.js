@@ -554,12 +554,12 @@ const PujaDrawer = ({
               isReadOnly={isReadOnly}
             />
             </Panel>
-          {/* </div> */}
+          
         </Collapse>
 
 
-<FeedbackPoojaId  drawerData={drawerData._id} />
-<PanditByPooojaId/>
+<FeedbackPoojaId  drawerData={drawerData._id}  />
+<PanditByPooojaId drawerData={drawerData._id}/>
 
 {console.log("lo "+ drawerData._id)}
 
