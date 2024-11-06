@@ -22,3 +22,17 @@ export const getAllfeedback =async(poojaId, samagriId, panditId, userId, current
 
 
 }
+
+
+export const createFeedbackReviews= async(data)=>{
+    try {
+       
+
+       return await axios.post(`${myServerUrl.url}/create-feedback-review`,data)
+       
+
+
+    } catch (error) {
+        console.log(" Error while fetching createFeedbackReviews", error)
+    }
+}

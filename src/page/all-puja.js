@@ -45,22 +45,24 @@ const AllPuja = () => {
       dataIndex: "title",
       key: "title",
       ellipsis: true,
+      width: 500,
     },
     {
       title: "Rating",
       dataIndex: "avgStars",
       key: "avgStars",
       ellipsis: true,
+      width: 80,
     },
     {
      
-          title: "minPrice",
+          title: "Minimum Price",
           dataIndex: "minPrice",
           key: "minPrice",
           ellipsis: true,
         },
         {
-          title: "maxPrice",
+          title: "Maximum Price",
           dataIndex: "maxPrice",
           key: "maxPrice",
           ellipsis: true,

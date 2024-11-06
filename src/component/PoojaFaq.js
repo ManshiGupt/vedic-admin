@@ -37,13 +37,13 @@ const PoojaFaq = ({ faq, action, setFaq, isReadOnly }) => {
             />
 
             <div className="text-right mt-2">
-              <Button
-                type="primary"
-                danger
+              <button
+               
+               className="hover:border-2   text-red-600  hover:text-white underline-offset-4 border-white hover:bg-red-500 px-3 rounded-lg py-2 m-0 opacity-60 hover:opacity-100"
                 onClick={() => action(item.title)}
               >
                 Delete
-              </Button>
+              </button>
             </div>
           </div>
         </Panel>

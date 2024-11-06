@@ -42,7 +42,7 @@ const PoojaPdf = ({ pdf, action, setPdf, isReadOnly }) => {
                 
                  
                 onClick={() => action(item.title)}
-                className="border-0 text-red-600 underline underline-offset-4 border-white hover:bg-red-200 px-3 rounded-lg py-2 m-0 "
+                className="hover:border-2   text-red-600  hover:text-white underline-offset-4 border-white hover:bg-red-500 px-3 rounded-lg py-2 m-0 opacity-60 hover:opacity-100"
               >
                 Delete
               </button>

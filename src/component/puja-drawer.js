@@ -4,6 +4,11 @@ import MyButton from "../ui/button.js";
 import { updatePooja } from "../api/puja-api.js";
 import { createPooja } from "../api/puja-api.js";
 import { Button, Modal } from "antd";
+import { Select, Tag,Space } from "antd";
+import { Switch } from "antd";
+
+
+
 
 import PoojaModalAdd from "./PoojaModalAdd.js";
 import PoojaCategoryToggle from "./PoojaCategoryToggle.js";
@@ -14,6 +19,7 @@ import FeedbackPoojaId from "./FeedbackPoojaId.js";
 import PanditByPooojaId from "./PanditByPooojaId.js";
 const { TextArea } = Input;
 const { Panel } = Collapse;
+const { Option } = Select;
 const PujaDrawer = ({
   openDrawer,
   closeDrawer,
@@ -34,6 +40,8 @@ const PujaDrawer = ({
   const [poojaDuration, setPoojaDuration] = useState(0);
   const [tithi, setTithi] = useState("");
   const [aboutPooja, setAboutPooja] = useState("");
+  
+  
 
   const [category, setCategory] = useState([]);
   const [visibility, setVisibility] = useState(false);
@@ -60,7 +68,7 @@ const PujaDrawer = ({
   const [showFaq, setShowFaq] = useState(false);
   const [activePanel, setActivePanel] = useState(null);
   //  const[showPdfModal, setshowPdfModal]
-
+  const [disabled, setDisabled] = useState(true);
   useEffect(() => {
     if (drawerData) {
       // Set data in form when the drawer opens for edit or view
@@ -151,7 +159,7 @@ const PujaDrawer = ({
   const handlePanelChange = (key) => {
     setActivePanel(key); // Toggle FAQ panel visibility
   };
-  console.log("loo "+ drawerData._id)
+  // console.log("loo "+ drawerData._id)
   const handleSubmit = async () => {
     const errorMessage = validateForm();
     if (errorMessage) {
@@ -248,6 +256,15 @@ const PujaDrawer = ({
     setPoojaBlog(f);
   };
 
+  const categoryOptions = ["Sanskaar", "Vedic Vidhi", "Festivals", "Havan", "Puja Path"];
+
+  const handleCategoryChange = (values) => {
+    setCategory(values);
+  };
+  const handleToggle = (checked) => {
+    setVisibility(checked); 
+  };
+
   const isReadOnly = action === "View";
 
   return (
@@ -269,14 +286,14 @@ const PujaDrawer = ({
         {/*        
         <PoojaModalAdd/> */}
 
-        <Collapse onChange={handlePanelChange} accordion>
+        <Collapse onChange={handlePanelChange} accordion  className="my-4">
           
           <Panel
-            header="Basic Pooja Details"
-            className="bg-gray-200 text-gray py-4 px-2"
+            header="Pooja Details"
+           
           >
             <div className="flex">
-              <p className="py-4">Title</p>
+              <p className="py-4 font-semibold antialiased">Title</p>
             </div>
             <Input
               value={title}
@@ -285,7 +302,7 @@ const PujaDrawer = ({
             />
 
             <div>
-              <p className="py-4">Images</p>
+              <p className="py-4 font-semibold antialiased">Images</p>
               <Input
                 value={images}
                 onChange={(e) => setImages(e.target.value)}
@@ -300,7 +317,7 @@ const PujaDrawer = ({
             )}
 
             <div>
-              <p className="py-4">Subtitle</p>
+              <p className="py-4 font-semibold antialiased">Subtitle</p>
               <TextArea
                 value={subtitle}
                 onChange={(e) => setSubtitle(e.target.value)}
@@ -309,7 +326,7 @@ const PujaDrawer = ({
             </div>
 
             <div>
-              <p className="py-4">Date (optional)</p>
+              <p className="py-4 font-semibold antialiased">Date (optional)</p>
               <Input
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
@@ -317,15 +334,30 @@ const PujaDrawer = ({
               />
             </div>
             <div>
-              <p className="py-4">visibility</p>
-              <Input
+              <p className="py-4 font-semibold antialiased">Visibility</p>
+              {/* <Input
                 value={visibility}
                 onChange={(e) => setVisibility(e.target.value)}
                 readOnly={isReadOnly}
-              />
+              /> */}
+               {!isReadOnly ? (
+        <Switch
+          checked={visibility}
+          onChange={handleToggle}
+          className="my-2"
+        />
+      ) : (
+        
+        <Switch
+          checked={visibility}
+          disabled={disabled}
+          onChange={handleToggle}
+          className="my-2"
+        />
+      )}
             </div>
             <div>
-              <p className="py-4">panditNo</p>
+              <p className="py-4 font-semibold antialiased">PanditNo</p>
               <Input
                 value={panditNo}
                 onChange={(e) => setPanditNo(e.target.value)}
@@ -333,28 +365,87 @@ const PujaDrawer = ({
               />
             </div>
             <div>
-              <p className="py-4">category</p>
-              <Input
+              <p className="py-4 font-semibold antialiased">Category</p>
+              {/* <Input
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 readOnly={isReadOnly}
-              />
-              <h1>
+              /> */}
+              {!isReadOnly ? (
+          <Select
+          mode="multiple"
+          value={category}
+          onChange={handleCategoryChange}
+          className="w-full"
+        >
+          {categoryOptions.map((option) => (
+            <Option
+              key={option}
+              value={option}
+              disabled={category.includes(option)}
+            >
+              {/* <Space> */}
+                {option}
+                {/* Cancel button to remove the selected option */}
+                {category.includes(option) && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent the click from affecting the Select
+                      handleCategoryChange(category.filter((item) => item !== option));
+                    }}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    ✖
+                  </button>
+                )}
+              {/* </Space> */}
+            </Option>
+          ))}
+        </Select>
+        
+      ) : (
+        <div className="py-2">
+          {category.map((item) => (
+            <Tag key={item} className="m-1 px-6 py-2">
+              {item}
+            </Tag>
+          ))}
+        </div>
+      )}
+              {/* <h1>
                 <PoojaCategoryToggle />
-              </h1>
+              </h1> */}
             </div>
 
             <div>
-              <p className="py-4">Pooja Tag</p>
+              <p className="py-4 font-semibold antialiased">Pooja Tag</p>
               <Input
                 value={poojaTag}
                 onChange={(e) => setPoojaTag(e.target.value)}
                 readOnly={isReadOnly}
               />
             </div>
+            <div>
+              <p className="py-4 font-semibold antialiased">Tithi</p>
+              <Input
+                value={tithi}
+                onChange={(e) => setTithi(e.target.value)}
+                readOnly={isReadOnly}
+              />
+            </div>
+            <div>
+              <p className="py-4 font-semibold antialiased">Index</p>
+              <Input
+                value={index}
+                onChange={(e) => setIndex(e.target.value)}
+                readOnly={isReadOnly}
+              />
+            </div>
+
+
 
             <div>
-              <p className="py-4">Pooja Duration (in hours)</p>
+              <p className="py-4 font-semibold antialiased">Pooja Duration (in hours)</p>
               <Input
                 type="number"
                 value={poojaDuration}
@@ -364,7 +455,7 @@ const PujaDrawer = ({
             </div>
 
             <div>
-              <p className="py-4">About Pooja</p>
+              <p className="py-4 font-semibold antialiased">About Pooja</p>
               <TextArea
                 rows={4}
                 value={aboutPooja}
@@ -373,8 +464,10 @@ const PujaDrawer = ({
               />
             </div>
           </Panel>
+          </Collapse>
           <div>
             {/* Faq pooja section */}
+            
 
             
 
@@ -401,7 +494,7 @@ const PujaDrawer = ({
             </div>
 
             {/* Collapsible FAQ list */}
-            <Collapse accordion>
+            <Collapse accordion  className="my-4">
               <Panel
                 header={
                   <div
@@ -413,13 +506,13 @@ const PujaDrawer = ({
                   >
                     <span>FAQ </span>
                     {action !== "View" && (
-                      <Button
+                      <button
                         
-                        className="bg-white text-gray-700 hover:bg-gray-500 "
+                      className="bg-white text-gray-700 hover:bg-gray-100 px-4 rounded-md border-2 border-gray-200 hover:shadow-md hover:text-gray-800"
                         onClick={() => setIsModalOpen(true)}
                       >
                         Add New
-                      </Button>
+                      </button>
                     )}
                   </div>
                 }
@@ -460,7 +553,7 @@ const PujaDrawer = ({
                 </Modal>
               </div>
 
-              <Collapse accordion>
+              <Collapse accordion  className="my-4">
                 <Panel
                   header={
                     <div
@@ -472,13 +565,13 @@ const PujaDrawer = ({
                     >
                       <span>PDF </span>
                       {action !== "View" && (
-                        <Button
-                          type="primary"
-                          className="bg-white text-gray-700 hover:bg-gray-500 "
+                        <button
+                         
+                          className="bg-white text-gray-700 hover:bg-gray-100 px-4  rounded-md border-2 border-gray-200 hover:shadow-md hover:text-gray-800"
                           onClick={showPdfModal}
                         >
                           Add new
-                        </Button>
+                        </button>
                       )}
                     </div>
                   }
@@ -524,7 +617,7 @@ const PujaDrawer = ({
                 />
               </Modal>
             </div>
-
+            <Collapse accordion  className="my-4">
             <Panel
               header={
                 <div
@@ -536,13 +629,13 @@ const PujaDrawer = ({
                 >
                   <span>Blog </span>
                   {action !== "View" && (
-                    <Button
-                      type="primary"
-                      className="bg-white text-gray-700 hover:bg-gray-500 "
+                    <button
+                     
+                      className="bg-white text-gray-700 hover:bg-gray-100 px-4  rounded-md border-2 border-gray-200 hover:shadow-md hover:text-gray-800"
                       onClick={showBlogModal}
                     >
                       Add new
-                    </Button>
+                    </button>
                   )}
                 </div>
               }
@@ -555,13 +648,14 @@ const PujaDrawer = ({
             />
             </Panel>
           
-        </Collapse>
+            </Collapse>
 
+{/* { action==="View" && <FeedbackPoojaId  drawerData={drawerData._id}/>} */}
 
-<FeedbackPoojaId  drawerData={drawerData._id}  />
-<PanditByPooojaId drawerData={drawerData._id}/>
+{/* <PanditByPooojaId drawerData={drawerData._id}/> */}
+{/* action==="View" */}
 
-{console.log("lo "+ drawerData._id)}
+{/* {console.log("lo "+ drawerData._id)} */}
 
         {action !== "View" && (
           <div style={{ marginTop: "30px" }}>
