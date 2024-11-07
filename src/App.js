@@ -6,6 +6,7 @@ import AppLayout from './layout/app-layout';
 import AllUser from "./page/all-user";
 import AllPuja from "./page/all-puja";
 import AllPandit from "./page/all-pandit";
+import Booking from "./page/Booking"
 import FaqHelp from "./page/faq-help";
 import Login from "./page/login";
 import SignUp from "./page/signup";
@@ -38,6 +39,7 @@ const App = () => {
                             <Route path="/user-profile" element={<AllUser />} />
                             <Route path="/all-puja" element={<AllPuja />} />
                             <Route path="/all-pandit" element={<AllPandit />} />
+                            <Route path="/bookings" element={<Booking/>} />
                             <Route path="/faq-help" element={<FaqHelp />} />
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/mantra-category" element={<MantraCategory />} />
