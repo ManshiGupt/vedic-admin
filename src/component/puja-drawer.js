@@ -650,7 +650,8 @@ const PujaDrawer = ({
           
             </Collapse>
 
-{/* { action==="View" && <FeedbackPoojaId  drawerData={drawerData._id}/>} */}
+{ action === "View"  && <FeedbackPoojaId  drawerData={drawerData._id}/>}
+{/* {console.log("yuo",drawerData._id)} */}
 
 {/* <PanditByPooojaId drawerData={drawerData._id}/> */}
 {/* action==="View" */}
