@@ -327,6 +327,7 @@ function AllUser() {
         }}
         scroll={{ y: 650 }}
         style={{ maxHeight: '98vh' }}
+        
       />
 
 

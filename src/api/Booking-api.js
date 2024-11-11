@@ -19,4 +19,13 @@ export const getAllPoojaBooking = async( userId, category, currentPage = 3, limi
   }
 }
 
- 
+ export const updateBooking = async(id, data)=>{
+
+  try {
+    const response = await axios.put(`${myServerUrl.url}/update-pooja-booking/${id}`, data);
+        return response.data;
+    
+  } catch (error) {
+    console.log("Error while updating booking of puja", error)
+  }
+ }
