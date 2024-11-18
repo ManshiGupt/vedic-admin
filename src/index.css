@@ -19,8 +19,8 @@ body {
 }
 
 .custom-table .ant-table-thead>tr>th {
-    /* background-color: #e2e2e2 !important;
-    color: #000 !important; */
+    background-color: #e2e2e2 !important;
+    color: #000 !important;
     /* @apply bg-gradient-to-br from-orange-500 to-yellow-400 text-white; */
    
 }
@@ -36,6 +36,6 @@ body {
 .ant-spin{
     color: #FF9800 !important;
 }
-.custom-table{
+/* .custom-table{
     @apply bg-gradient-to-br from-orange-500 to-yellow-400 text-white;
-}
+} */

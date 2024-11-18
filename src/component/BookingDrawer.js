@@ -7,6 +7,8 @@ import { Button, Modal } from "antd";
 import { Select, Tag, Space } from "antd";
 import { Switch } from "antd";
 import { updateBooking } from "../api/Booking-api.js";
+import { getPoojaByPanditId } from "../api/PanditbyPooja.js";
+import PanditSlot from "./PanditSlot.js";
 
 const { TextArea } = Input;
 
@@ -45,6 +47,11 @@ const BookingDrawer = ({
   const [deliveryAddressData, setDeliveryAddressData] = useState([]);
 
   const [poojaName, setPoojaName] = useState("");
+  const [allPandit, setAllPandit] = useState([]);
+
+  const[panditId, setPanditId]= useState("");
+  const[pujaId, setPujaId]= useState("");
+
 
   useEffect(() => {
     if (drawerData) {
@@ -65,6 +72,7 @@ const BookingDrawer = ({
       setBookingData(drawerData.bookingData || []);
       setDeliveryAddressData(drawerData.deliveryAddressData || []);
       setUserDetails(drawerData.userDetails || []);
+
       setIsUpdating(action === "Edit");
     }
   }, [drawerData]);
@@ -120,6 +128,22 @@ const BookingDrawer = ({
     setDeliveryAddressData([]);
   };
 
+  // const getPoojaByPanditIdd= async()=>{
+  //   try {
+  //     const res = await getPoojaByPanditId(("", "" ,1, 10, drawerData.bookingData.poojaId));
+  //     setAllPandit(res)
+  //     console.log("pandit", res)
+  //     console.log("po",drawerData.bookingData)
+  //   } catch (error) {
+
+  //   }
+
+  // }
+
+  // useEffect(() => {
+  //   getPoojaByPanditIdd();
+  // }, [])
+
   const handleSubmit = async () => {
     // const errorMessage = validateForm();
     // if (errorMessage) {
@@ -159,6 +183,7 @@ const BookingDrawer = ({
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
+  const slots = ["5AM - 7AM", "9AM - 11AM", "1PM - 2PM", "4PM - 6PM"];
 
   const isReadOnly = action === "View";
 
@@ -184,6 +209,28 @@ const BookingDrawer = ({
         />
         <div>
           <p className="py-4 font-semibold antialiased">Pooja Time</p>
+
+          <div>
+            <div>
+              {action === "Edit" && (
+                <div className="flex gap-10 py-4">
+                  {slots.map((slot, index) => (
+                    <div
+                      key={index}
+                      onClick={() => setPoojaTime(slot)} // Set selected slot as poojaTime
+                      className={`cursor-pointer border-2 p-2 rounded-md shadow-sm ${
+                        slot === poojaTime
+                          ? "border-blue-500 bg-blue-100"
+                          : "border-gray-200"
+                      }`}
+                    >
+                      <h1>{slot}</h1>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
           <Input
             value={poojaTime}
             onChange={(e) => setPoojaTime(e.target.value)}
@@ -210,6 +257,30 @@ const BookingDrawer = ({
             className="h-10 w-10 rounded-lg "
           />
         </div>
+
+        {action === "Edit" && (
+          <div>
+            {bookingData.map((data, index) => (
+              <div key={index}>
+                <div className="">
+                <PanditSlot poojaDate={poojaDate} pujaId={data.poojaId} panditId={data.panditId} panditName={data.panditName}/>
+                  <p className="py-2 font-semibold antialiased">Pandit Name</p>
+                  <Input value={data.panditName} readOnly />
+                </div>
+                <div>
+                      <p className="py-2 font-semibold antialiased">
+                        Puja ID
+                      </p>
+                      <Input value={data.poojaId} readOnly
+                      
+                      />
+                    </div>
+
+              </div>
+            ))}
+          </div>
+        )}
+
 
         {action == "View" && (
           <div>
@@ -244,14 +315,14 @@ const BookingDrawer = ({
               />
             </div>
 
-            <div>
+            {/* <div>
               <p className="py-4 font-semibold antialiased">Booking Slot ID</p>
               <Input
                 value={bookingSlotId}
                 onChange={(e) => setBookingSlotId(e.target.value)}
                 readOnly={isReadOnly}
               />
-            </div>
+            </div> */}
 
             <div>
               <p className="py-4 font-semibold antialiased">Pandit Remark</p>
@@ -307,8 +378,12 @@ const BookingDrawer = ({
                 onChange={(e) => setOrderId2(e.target.value)}
                 readOnly={isReadOnly}
               />
-
-              <div className="h-1 mt-4  bg-gradient-to-r from-orange-500 to-yellow-300"></div>
+              <div className=" ">
+                <div className="mt-4 -mb-4 font-bold text-xl">
+                  Pandit Details
+                </div>
+                <div className="h-1 ml-40 bg-gradient-to-r from-orange-500 to-yellow-300"></div>
+              </div>
             </div>
           </div>
         )}
@@ -317,36 +392,52 @@ const BookingDrawer = ({
           <div>
             {bookingData.map((data, index) => (
               <div key={index}>
-                <p className="py-4 font-semibold antialiased">Pandit ID</p>
-                <Input value={data.panditId} readOnly />
+                {/* <p className="py-4 font-semibold antialiased">Pandit ID</p>
+                <Input value={data.panditId} readOnly /> */}
+                <div className="">
+                  <div>
+                    <p className="py-4 font-semibold antialiased"></p>
+                    <img
+                      src={data.panditImage}
+                      alt="Pandit"
+                      style={{ width: "100px" }}
+                    />
+                  </div>
+                  <div>
+                    <div>
+                      <p className="py-2 font-semibold antialiased">
+                        Pandit Name
+                      </p>
+                      <Input value={data.panditName} readOnly />
+                    </div>
+                    <div>
+                      <p className="py-2 font-semibold antialiased">
+                        Puja ID
+                      </p>
+                      <Input value={data.poojaId} readOnly />
+                    </div>
 
-                <p className="py-4 font-semibold antialiased">Pandit Image</p>
-                <img
-                  src={data.panditImage}
-                  alt="Pandit"
-                  style={{ width: "100px" }}
-                />
+                    <p className="py-2 font-semibold antialiased">
+                      Pandit Location
+                    </p>
+                    <Input value={data.panditLocation} readOnly />
 
-                <p className="py-4 font-semibold antialiased">
-                  Pandit Location
-                </p>
-                <Input value={data.panditLocation} readOnly />
+                    <p className="py-2 font-semibold antialiased">
+                      Pandit Price
+                    </p>
+                    <Input value={data.panditNewPrice} readOnly />
 
-                <p className="py-4 font-semibold antialiased">Pandit Name</p>
-                <Input value={data.panditName} readOnly />
+                    <p className="py-2 font-semibold antialiased">
+                      Pandit Number
+                    </p>
+                    <Input value={data.panditNo} readOnly />
+                  </div>
+                </div>
 
-                <p className="py-4 font-semibold antialiased">
-                  Pandit New Price
-                </p>
-                <Input value={data.panditNewPrice} readOnly />
-
-                <p className="py-4 font-semibold antialiased">Pandit Number</p>
-                <Input value={data.panditNo} readOnly />
-
-                <p className="py-4 font-semibold antialiased">
+                {/* <p className="py-4 font-semibold antialiased">
                   Pandit Old Price
                 </p>
-                <Input value={data.panditOldPrice} readOnly />
+                <Input value={data.panditOldPrice} readOnly /> */}
 
                 <p className="py-4 font-semibold antialiased">Pooja Date</p>
                 <Input value={data.poojaDate} readOnly />
@@ -354,8 +445,8 @@ const BookingDrawer = ({
                 <p className="py-4 font-semibold antialiased">Pooja Duration</p>
                 <Input value={data.poojaDuration} readOnly />
 
-                <p className="py-4 font-semibold antialiased">Pooja ID</p>
-                <Input value={data.poojaId} readOnly />
+                {/* <p className="py-4 font-semibold antialiased">Pooja ID</p>
+                <Input value={data.poojaId} readOnly /> */}
 
                 <p className="py-4 font-semibold antialiased">Pooja Image</p>
                 <img
@@ -375,7 +466,14 @@ const BookingDrawer = ({
                   value={data.verifiedIcon ? "Verified" : "Not Verified"}
                   readOnly
                 />
-                <div className="h-1 mt-4  bg-gradient-to-r from-orange-500 to-yellow-300"></div>
+                {/* <div className="h-1 mt-4  bg-gradient-to-r from-orange-500 to-yellow-300"></div> */}
+                <div className="my-10">
+                  <div className="mt-4 -mb-4 font-bold text-xl">
+                    User Details
+                  </div>
+
+                  <div className="h-1 ml-40 bg-gradient-to-r from-orange-500 to-yellow-300 "></div>
+                </div>
               </div>
             ))}
           </div>
@@ -444,7 +542,13 @@ const BookingDrawer = ({
                 <Input value={data.state} readOnly />
               </div>
             ))}
-            <div className="h-1 mt-4  bg-gradient-to-r from-orange-500 to-yellow-300"></div>
+            {/* <div className="h-1 mt-4  bg-gradient-to-r from-orange-500 to-yellow-300"></div> */}
+            <div className="my-10">
+              <div className="mt-4 -mb-4 font-bold text-xl">
+                Delivery Details
+              </div>
+              <div className="h-1 ml-40 bg-gradient-to-r from-orange-500 to-yellow-300"></div>
+            </div>
           </div>
         )}
 
@@ -489,6 +593,7 @@ const BookingDrawer = ({
             ))}
           </div>
         )}
+       
 
         {action !== "View" && (
           <div style={{ marginTop: "30px" }}>

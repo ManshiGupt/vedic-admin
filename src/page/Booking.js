@@ -1,7 +1,7 @@
 import { getAllPoojaBooking } from "../api/Booking-api";
 
 import React, { useState, useCallback, useEffect } from "react";
-import { getAllPuja } from "../api/puja-api";
+
 import { Button, Input } from "antd";
 import { Table, Spin } from "antd";
 import { useTokenData } from "../support/local-data-store.js";
@@ -84,9 +84,9 @@ const Booking = () => {
 
   const renderPujaSamagri=(pujaSamagri)=>{
     if(pujaSamagri===true){
-      return "True"
+      return "Yes"
     }else{
-      return "False"
+      return "No"
     }
     
   }
@@ -104,6 +104,23 @@ const Booking = () => {
     );
   };
 
+  const renderStatus = (status) => {
+    return (
+        <div style={{
+            background: status === 'Pending' ? '#bebebe' : status === 'Successful' ? '#5ced73' : '#ff6242',
+            borderRadius: 20,
+            padding: '5px',
+            // textAlign: 'center',
+            color: 'white',
+            display: 'inline-block',
+            paddingLeft: 20,
+            paddingRight: 20
+        }}>
+            {status}
+        </div>
+    );
+};
+
   const columns = [
     {
       title: "S.No",
@@ -113,29 +130,31 @@ const Booking = () => {
       render: (text, record, index) => index + 1,
       align:'center'
     },
-   
     {
-      title: "Time",
-      dataIndex: "poojaTime",
-      key: "poojaTime",
-      ellipsis: true,
-      width: 120,
+      title: "Booking Time",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      width: 100,
+      render: (createdAtString) => {
+        const createdAtTimestamp = Date.parse(createdAtString);
+        const formattedDate = new Date(createdAtTimestamp).toLocaleString();
+        return formattedDate;
+      },
     },
     {
-      title: "User Name",
+      title: "Customer Name",
       dataIndex: "userDetails",
       key: "userDetails",
       ellipsis: true,
-      width: 180,
+      width: 160,
       render: (userDetails) => {
         return renderUserDetails(userDetails);
       },
-      align: 'center',
+      align: 'left',
       fixed: 'left',
     },
-
     {
-      title: "Pooja Name",
+      title: "Puja Name",
       dataIndex: "bookingData",
       key: "bookingData",
       // ellipsis: true,
@@ -144,21 +163,37 @@ const Booking = () => {
       },
       width: 120,
     },
+    {
+      title: "Puja Date",
+      dataIndex: "poojaDate",
+      key: "poojaDate",
+      ellipsis: true,
+      width: 150,
+    },
+
+   
+    {
+      title: "Time",
+      dataIndex: "poojaTime",
+      key: "poojaTime",
+      ellipsis: true,
+      width: 120,
+    },
+    
+    
 
     {
       title: "Status",
       dataIndex: "bookingStatus",
       key: "bookingStatus",
       ellipsis: true,
-      width: 120, 
+      // width: 120, 
+      
+      render: (bookingStatus) => {
+        return renderStatus(bookingStatus)
+      },
     },
-    {
-      title: "Pooja Date",
-      dataIndex: "poojaDate",
-      key: "poojaDate",
-      ellipsis: true,
-      width: 150,
-    },
+    
   
     {
       title: "Token Amount",
@@ -196,17 +231,7 @@ const Booking = () => {
     },
     
     
-    {
-      title: "Time",
-      dataIndex: "createdAt",
-      key: "createdAt",
-      width: 100,
-      render: (createdAtString) => {
-        const createdAtTimestamp = Date.parse(createdAtString);
-        const formattedDate = new Date(createdAtTimestamp).toLocaleString();
-        return formattedDate;
-      },
-    },
+    
     {
       title: "Action",
       key: "action",

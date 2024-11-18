@@ -29,3 +29,23 @@ export const getAllPoojaBooking = async( userId, category, currentPage = 3, limi
     console.log("Error while updating booking of puja", error)
   }
  }
+
+
+ export const getAllBookingSlots= async(panditId, slotDate)=>{
+
+  try {
+    
+   const data= {
+    params:(
+      panditId, slotDate
+    )
+   }
+
+
+    const response= axios.get(`${myServerUrl.url}/get-booking-slot`,data);
+    return response;
+    
+  } catch (error) {
+    console.log("Error while getAllBookingSlots", error)
+  }
+ }
