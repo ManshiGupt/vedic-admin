@@ -1,51 +1,54 @@
-import axios from 'axios'
-import React from 'react'
-import { myServerUrl } from '../support/api-helper'
+import axios from "axios";
+import React from "react";
+import { myServerUrl } from "../support/api-helper";
 
-export const getAllPoojaBooking = async( userId, category, currentPage = 3, limit = 10  ) => {
-   
+export const getAllPoojaBooking = async (
+  userId,
+  category,
+  currentPage = 3,
+  limit = 10
+) => {
   try {
-    const data= {
-        params:
-       { userId, category, currentPage, limit}
+    const data = {
+      params: { userId, category, currentPage, limit },
+    };
+    const res = await axios.get(`${myServerUrl.url}/get-pooja-booking`, data);
+    console.log("book api", res);
+    return res;
+  } catch (error) {
+    console.log("Error while fetching data in booking api");
+  }
+};
+
+export const updateBooking = async (id, data) => {
+  try {
+    const response = await axios.put(
+      `${myServerUrl.url}/update-pooja-booking/${id}`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    console.log("Error while updating booking of puja", error);
+  }
+};
+
+
+export const getAllBookingSlots = async (panditId, slotDate) => {
+ 
+ 
+
+  try {
+    const data={
+      params:{
+        panditId, slotDate
+      }
     }
-    const res = await axios.get(`${myServerUrl.url}/get-pooja-booking`, data)
-    console.log("book api", res)
-    return res
-   
+    const response = await axios.get(`${myServerUrl.url}/get-booking-slot`, data);
     
+    console.log("getAllBookingSlots api", response);
+    return response.data;
   } catch (error) {
-    console.log("Error while fetching data in booking api")
+    console.error("Error while getAllBookingSlots:", error);
+    throw error;
   }
-}
-
- export const updateBooking = async(id, data)=>{
-
-  try {
-    const response = await axios.put(`${myServerUrl.url}/update-pooja-booking/${id}`, data);
-        return response.data;
-    
-  } catch (error) {
-    console.log("Error while updating booking of puja", error)
-  }
- }
-
-
- export const getAllBookingSlots= async(panditId, slotDate)=>{
-
-  try {
-    
-   const data= {
-    params:(
-      panditId, slotDate
-    )
-   }
-
-
-    const response= axios.get(`${myServerUrl.url}/get-booking-slot`,data);
-    return response;
-    
-  } catch (error) {
-    console.log("Error while getAllBookingSlots", error)
-  }
- }
+};

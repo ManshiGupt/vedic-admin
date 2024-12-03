@@ -1,79 +1,107 @@
-import React, { useEffect, useState } from 'react';
-import { getPoojaByPanditId, getSlotsByPanditId } from '../api/PanditbyPooja'; // Assuming getSlotsByPanditId is the API to get slots
-import { Select, Space } from 'antd';
-import { getAllBookingSlots } from '../api/Booking-api';
+import React, { useEffect, useState } from "react";
+import { getPoojaByPanditId } from "../api/PanditbyPooja";
+import { getAllBookingSlots } from "../api/Booking-api";
+import { Select, Space, Input } from "antd";
 
-const PanditSlot = ({ poojaDate, pujaId, panditId ,panditName}) => {
-  const [data, setData] = useState([]);
-  const [slots, setSlots] = useState([]);
+const PanditSlot = ({
+  poojaDate,
+  pujaId,
+  panditId,
+  panditName,
+  bookingData,
+}) => {
+  const [data, setData] = useState([]); // To store the list of pandits
+  const [slots, setSlots] = useState([]); // To store available slots
+  const [calculatedSlots, setCalculatedSlots] = useState([]); // To store calculated slots (x and y)
 
+  // Fetch pandits by Pooja ID
   const fetchData = async () => {
     try {
-      const res = await getPoojaByPanditId('', '', 1, 10, pujaId);
-      console.log('getPanditByPooja:', res);
-      setData(res); // Assuming `res` is an array of objects containing `name`
+      const res = await getPoojaByPanditId("", "", 1, 10, pujaId);
+      setData(res); // Assuming `res` is an array of objects with `name` and `_id`
     } catch (error) {
-      console.log('Error while fetching getPanditByPooja:', error);
+      console.error("Error while fetching getPanditByPooja:", error);
     }
   };
 
-  const fetchSlots = async (panditId,poojaDate) => {
+  // Format date to `dd-mm-yy`
+  const formatDateString = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = String(date.getFullYear()).slice(-2);
+    return `${day}-${month}-${year}`;
+  };
+
+  const formattedDate = formatDateString(poojaDate);
+
+  const fetchSlots = async (panditId) => {
     try {
-      const res = await getAllBookingSlots(panditId,poojaDate); // Fetch slots by panditId
-      console.log('Fetched slots:', res);
+      const res = await getAllBookingSlots(panditId, formattedDate);
       setSlots(res); // Assuming `res` is an array of slot strings
     } catch (error) {
-      console.log('Error fetching slots:', error);
+      console.error('Error fetching slots:', error);
     }
   };
-
+  // Effect to fetch pandits on component mount
   useEffect(() => {
     fetchData();
   }, []);
 
-  const handleSelectChange = (value,poojaDate) => {
-    // console.log(`Selected Pandit ID: ${value}`);
-       console.log(`Selected Pandit cccID: ${value}`,poojaDate);
-    fetchSlots(value._id,poojaDate); // Call API for slots
+  // Handle selection of a pandit from dropdown
+  const handleSelectChange = (panditId) => {
+    fetchSlots(panditId); // Fetch slots for selected pandit
+  };
+
+  // Calculate slots when bookingData changes
+
+  const t = parseInt(bookingData[0].poojaDuration )|| 1; // Default to 1 hour if no duration is provided
+  let x = 0;
+  let y = 4;
+  const ram = () => {
+   
+    const a=[];
+    for (let i = 5; y <= 19; i++) {
+
+      x = y + 1;
+      y = x + t;
+      a.push(x,y);
+      console.log(x);
+      
+    }
+    setCalculatedSlots(a);
+    
   };
 
   return (
     <div>
       <h2>Pandit Slot Selection</h2>
-   
-      {/* Select dropdown to show pandit names */}
+      {/* Dropdown to select Pandit */}
       <Space wrap>
         <Select
-          //  defaultValue={panditName}
-           placeholder={panditName}
+          placeholder={panditName || "Select a Pandit"}
           style={{ width: 200 }}
           onChange={handleSelectChange}
           options={data.map((pandit) => ({
-            value: pandit._id, // Assuming `id` uniquely identifies a pandit
+            value: pandit._id, // Assuming `_id` uniquely identifies a pandit
             label: pandit.name,
           }))}
         />
       </Space>
 
-      {/* Displaying slots dynamically */}
-
-      {slots.slotDate}
-      {console.log("looi",slots)}
-      {/* <div className="flex gap-10 py-4">
-        {slots.map((slot, index) => (
-          <div
-            key={index}
-            // onClick={() => setPoojaTime(slot)} // Set selected slot as poojaTime
-            className={`cursor-pointer border-2 p-2 rounded-md shadow-sm ${
-              slot === poojaTime
-                ? 'border-blue-500 bg-blue-100'
-                : 'border-gray-200'
-            }`}
-          >
-            <h1>{slot}</h1>
+      {/* Display calculated slots */}
+      <div className="mt-5">
+        <h3 onClick={ram}>Calculated Slots</h3>
+        {calculatedSlots.map((data, i)=>(
+            
+<div>
+         { <div className="border-2 p-2 mb-4 rounded-lg mr-96 flex justify-center">
+          {data}AM - {data+t}AM
+          </div>}
           </div>
         ))}
-      </div> */}
+         
+      </div>
     </div>
   );
 };

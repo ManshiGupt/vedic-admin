@@ -51,12 +51,14 @@ const BookingDrawer = ({
 
   const[panditId, setPanditId]= useState("");
   const[pujaId, setPujaId]= useState("");
+  
 
 
   useEffect(() => {
     if (drawerData) {
       // Set data in form when the drawer opens for edit or view
       setPoojaDate(drawerData.poojaDate || "");
+      // setPoojaDate(drawerData.poojaDate || "");
       setPoojaTime(drawerData.poojaTime || "");
       setBookingStatus(drawerData.bookingStatus || "");
       setAdditionalRemark(drawerData.additionalRemark || "");
@@ -210,8 +212,14 @@ const BookingDrawer = ({
         <div>
           <p className="py-4 font-semibold antialiased">Pooja Time</p>
 
+          <Input
+          value={poojaDate}
+          onChange={(e) => setPoojaDate(e.target.value)}
+          readOnly={isReadOnly}
+        />
+
           <div>
-            <div>
+            {/* <div>
               {action === "Edit" && (
                 <div className="flex gap-10 py-4">
                   {slots.map((slot, index) => (
@@ -229,7 +237,7 @@ const BookingDrawer = ({
                   ))}
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
           <Input
             value={poojaTime}
@@ -263,7 +271,13 @@ const BookingDrawer = ({
             {bookingData.map((data, index) => (
               <div key={index}>
                 <div className="">
-                <PanditSlot poojaDate={poojaDate} pujaId={data.poojaId} panditId={data.panditId} panditName={data.panditName}/>
+                <PanditSlot poojaDate={poojaDate} 
+                            pujaId={data.poojaId} 
+                            panditId={data.panditId} 
+                            panditName={data.panditName} 
+                            bookingData={bookingData}
+
+                  />
                   <p className="py-2 font-semibold antialiased">Pandit Name</p>
                   <Input value={data.panditName} readOnly />
                 </div>
@@ -412,6 +426,12 @@ const BookingDrawer = ({
                     </div>
                     <div>
                       <p className="py-2 font-semibold antialiased">
+                        pooja duration
+                      </p>
+                      <Input value={data.poojaDuration} readOnly />
+                    </div>
+                    <div>
+                      <p className="py-2 font-semibold antialiased">
                         Puja ID
                       </p>
                       <Input value={data.poojaId} readOnly />
@@ -462,10 +482,7 @@ const BookingDrawer = ({
                 <Input value={data.poojaSubtitle} readOnly />
 
                 <p className="py-4 font-semibold antialiased">Verified Icon</p>
-                <Input
-                  value={data.verifiedIcon ? "Verified" : "Not Verified"}
-                  readOnly
-                />
+              
                 {/* <div className="h-1 mt-4  bg-gradient-to-r from-orange-500 to-yellow-300"></div> */}
                 <div className="my-10">
                   <div className="mt-4 -mb-4 font-bold text-xl">
@@ -734,3 +751,44 @@ export default BookingDrawer;
 // }
 
 // export default BookingDrawer
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+
+// class Main {
+//   public static void main(String[] args) {
+//       System.out.println("Try programiz.pro");
+//       int t=2 ;// time taken to complete pooja
+//       int g= 1;// constant 1 hours
+//       int x=0;
+//      int y=4;
+//       for(int i=5;y<=19;i++){
+         
+//           x=y+1;
+          
+//           y=x+t;
+      
+//           System.out.print("x = "+ x);
+//           System.out.println(" y = "+ y);
+//       }
+//   }
+// }
+
+// Online Java Compiler
+// Use this editor to write, compile and run your Java code online
+
+// class Main {
+//   public static void main(String[] args) {
+//       System.out.println("Try programiz.pro");
+//       int x=5;
+//       for(int i=1;i<20;i++){
+//           x=i;
+//           int k=0;
+//           if(x>12){
+//                k =x-12;
+              
+//           }
+//            System.out.print(k+"jheue");
+//            System.out.println(x);
+//       }
+//   }
+// }
