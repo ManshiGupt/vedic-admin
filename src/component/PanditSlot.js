@@ -40,7 +40,7 @@ const PanditSlot = ({
       const res = await getAllBookingSlots(panditId, formattedDate);
       setSlots(res); // Assuming `res` is an array of slot strings
     } catch (error) {
-      console.error('Error fetching slots:', error);
+      console.error("Error fetching slots:", error);
     }
   };
   // Effect to fetch pandits on component mount
@@ -55,22 +55,18 @@ const PanditSlot = ({
 
   // Calculate slots when bookingData changes
 
-  const t = parseInt(bookingData[0].poojaDuration )|| 1; // Default to 1 hour if no duration is provided
+  const t = parseInt(bookingData[0].poojaDuration) || 1; // Default to 1 hour if no duration is provided
   let x = 0;
   let y = 4;
   const ram = () => {
-   
-    const a=[];
+    const a = [];
     for (let i = 5; y <= 19; i++) {
-
       x = y + 1;
       y = x + t;
-      a.push(x,y);
+      a.push(x, y);
       console.log(x);
-      
     }
     setCalculatedSlots(a);
-    
   };
 
   return (
@@ -92,15 +88,23 @@ const PanditSlot = ({
       {/* Display calculated slots */}
       <div className="mt-5">
         <h3 onClick={ram}>Calculated Slots</h3>
-        {calculatedSlots.map((data, i)=>(
-            
-<div>
-         { <div className="border-2 p-2 mb-4 rounded-lg mr-96 flex justify-center">
-          {data}AM - {data+t}AM
-          </div>}
-          </div>
-        ))}
-         
+        {calculatedSlots.map((data, i) => {
+          console.log(data)
+          const startTime = data > 12 ? `${data - 12}PM` : `${data}AM`;
+          const endTime =
+            data + t > 12
+              ? `${(data + t - 12) % 12 || 12} PM`
+              : `${data + t}AM`;
+
+          return (
+            <div
+              key={i}
+              className="border-2 p-2 mb-4 rounded-lg mr-96 flex justify-center"
+            >
+              {startTime} - {endTime}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
